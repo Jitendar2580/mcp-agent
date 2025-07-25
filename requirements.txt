@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+groq
+python-dotenv
+pydantic
+openai
+sqlalchemy
+psycopg2 
+langchain-mcp-adapters
+mcp
+aiosmtplib
+email-validator
