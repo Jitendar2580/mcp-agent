@@ -1,5 +1,5 @@
 # agent.py
-from .tools import mathematics_calculation, weather_details, education, trip_plan ,send_email
+from .tools import mathematics_calculation, weather_details, education, trip_plan ,send_email ,sql_query
 from .groq_client import client 
 
 
@@ -9,9 +9,25 @@ conversation_history = []
 async def ask_agent(question: str) -> str:
     global conversation_history
 
-    system_prompt = """You are a helpful AI assistant with access to the following four specialized tools...
+    system_prompt = """
+        You are a helpful AI assistant designed to respond using specialized tools only, except for greetings.
+        
+        You MUST decide which tool to invoke based on the user's question. Choose only one tool per question unless explicitly asked to do multiple things.
+        
+        ✅ You can respond to basic greetings like "hi", "hello", or "how are you?" with a short, friendly message.
+        
+        🏁 Your Task:
 
-    [same system prompt as your original code]
+            When a user sends a message, analyze the intent. Then:
+
+            1. Identify which tool (if any) fits the request.
+            2. Call the tool with the right argument.
+            3. Return the result to the user clearly.
+
+        If the question is vague, ask the user for clarification.
+
+        Never guess a result — always rely on the correct tool output.
+        
     """
 
     if not conversation_history:
@@ -30,13 +46,20 @@ async def ask_agent(question: str) -> str:
     result = ""
 
     if "math" in question.lower() or "calculate" in question.lower():
+        print("Caclulation Tool Triggered----------------------->")
         result = mathematics_calculation(question)
     elif "weather" in question.lower():
+        print("Weather Tool Triggered----------------------->")
         result = weather_details(question)
     elif "trip" in question.lower() or "plan" in question.lower():
+        print("Trip Tool Triggered----------------------->")
         result = trip_plan(question) 
     elif "explain" in question.lower() or "learn" in question.lower():
+        print("Education Tool Triggered----------------------->")
         result = education(question)
+    elif "select" in question.lower() or "insert" in question.lower() or "update" in question.lower():
+        print("Sql Query Tool Triggered----------------------->")
+        result = await sql_query(question)
     if not result:
         result = reply
          
@@ -44,6 +67,7 @@ async def ask_agent(question: str) -> str:
 
     # -------------------- Detect send email intent --------------------
     if "send on email" in question.lower() or "email this" in question.lower() or "send via email" in question.lower():
+        print("Email Tool Triggered----------------------->")
         await send_email(
             subject="📧 Requested Info from AI Assistant",
             body=last_result,

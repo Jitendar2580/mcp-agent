@@ -10,3 +10,5 @@ langchain-mcp-adapters
 mcp
 aiosmtplib
 email-validator
+markdown2
+asyncpg

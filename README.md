@@ -28,3 +28,14 @@ This project is a conversational AI assistant powered by the `llama3-70b` model 
 ## 📨 Email Integration
 
 When the user asks something like:
+
+## This is Agent screen
+<div>
+    <img src="./mcp_agent/assets/assistant.png" width="100%" />
+</div>
+
+## This is About Agent Screen
+
+<div>
+    <img src="./mcp_agent/assets/information.png" width="100%" />
+</div>
